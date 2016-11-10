@@ -445,52 +445,63 @@ var User = function()
 	  } 
 	};
 
-	// this.addAcademicInfo = function(req, res) {	
-	//  if (!req.payload._id) {
-	//     res.status(401).json({
-	//       message : constants.constUnAuthorizedAccess
-	//     });
-	//   } else {
-	//     User.findById(req.payload._id).exec(function(err, user) {
-	//     	var userData = {
-	//     		currentlyStudying : req.body.currentlyStudying,
-	// 			currentCourse : req.body.currentCourse,
-	// 			currentCourseName : req.body.currentCourseName,
-	// 			currentCourseSchoolCollege : req.body.currentCourseName,
-	// 			gender : req.body.gender,
-	// 			address : {
-	// 				permanent : req.body.address.permanent,
-	// 			    postal : req.body.address.postal,
+	this.addAcademicInfo = function(req, res) {	
+	 if (!req.payload._id) {
+	    res.status(401).json({
+	      message : constants.constUnAuthorizedAccess
+	    });
+	  } else {
+	    User.findById(req.payload._id).exec(function(err, user) {
+	    	var userData = {
+	    		currentlyStudying : req.body.currentlyStudying,
+				currentCourse : req.body.currentCourse,
+				currentCourseName : req.body.currentCourseName,
+				currentCourseSchoolCollege : req.body.currentCourseSchoolCollege,
+				currentCourseUniversity : req.body.currentCourseUniversity,
+				currentCourseDepartmentBranch : req.body.currentCourseDepartmentBranch,
+				currentCourseProgram : req.body.currentCourseProgram,
+				currentCourseSemester : req.body.currentCourseSemester,
+				currentCourseJoiningYear : req.body.currentCourseJoiningYear,
+				currentCourseCompletionYear : req.body.currentCourseCompletionYear,
+				ifAlumini : req.body.ifAlumini,
+				aluminiNumber : req.body.aluminiNumber,
+				aluminiInstitution : req.body.aluminiInstitution
+	    	}
+	    	//console.log(userData);
 
-	// 			},
-	// 			phone1 : req.body.phone1,
-	// 			phone2 : req.body.phone1,
-	// 			mobile : req.body.mobile,
-	// 			alternateMobile : req.body.alternateMobile,
-	// 			alternateEmailAddress : req.body.alternateEmailAddress,
-	// 			fatherName : req.body.fatherName,
-	// 			fatherMobile : req.body.fatherMobile,
-	// 			fatherEmailAddress : req.body.fatherEmailAddress,
-	// 			motherName : req.body.motherName,
-	// 			motherMobile : req.body.motherMobile,
-	// 			motherEmailAddress : req.body.motherEmailAddress,
-	// 			guardianName1 : req.body.guardianName1,
-	// 			guardianMobile1 : req.body.guardianMobile1,
-	// 			guardianEmailAddress1 : req.body.guardianEmailAddress1,
-	// 			guardianName2 : req.body.guardianName2,
-	// 			guardianMobile2 : req.body.guardianMobile2,
-	// 			guardianEmailAddress2 : req.body.guardianEmailAddress2,
-	// 			guardianParentMobile : req.body.guardianParentMobile,
-	// 			guardianParentEmailAddress : req.body.guardianParentEmailAddress,
-	//     	}
-	//     	//console.log(userData);
+	    	User.findOneAndUpdate({_id : user._id}, userData, {upsert : true, new : true}, function(err, updatedUser){
+				return res.status(200).json({user : updatedUser});
+			})
+	    });
+	  } 
+	};
 
-	//     	User.findOneAndUpdate({_id : user._id}, userData, {upsert : true, new : true}, function(err, updatedUser){
-	// 			return res.status(200).json({user : updatedUser});
-	// 		})
-	//     });
-	//   } 
-	// };
+	this.addProfessionalInfo = function(req, res) {	
+	 if (!req.payload._id) {
+	    res.status(401).json({
+	      message : constants.constUnAuthorizedAccess
+	    });
+	  } else {
+	    User.findById(req.payload._id).exec(function(err, user) {
+	    	var userData = {
+	    		currentlyWorking : req.body.currentlyWorking,
+				currentWorkingInstitution : req.body.currentWorkingInstitution,
+				currentWorkingDesignation : req.body.currentWorkingDesignation,
+				currentWorkingDepartment : req.body.currentWorkingDepartment,
+				currentWorkingInstitutionJoiningDate : req.body.currentWorkingInstitutionJoiningDate,
+				ifPreviouslyWorked : req.body.ifPreviouslyWorked,
+				previouslyWorkedNumber : req.body.previouslyWorkedNumber,
+				previousWorks : req.body.previousWorks,
+				currentRoles : req.body.currentRoles
+	    	}
+	    	//console.log(userData);
+
+	    	User.findOneAndUpdate({_id : user._id}, userData, {upsert : true, new : true}, function(err, updatedUser){
+				return res.status(200).json({user : updatedUser});
+			})
+	    });
+	  } 
+	};
 
 	//Check if old Password Matches
 	this.oldPasswordVerify = function(req, res) {	

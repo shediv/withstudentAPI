@@ -29,7 +29,9 @@ router.get('/profile', auth, UserCtrl.profile); //.. Get profile data API
 router.put('/profile', auth, UserCtrl.updateProfile); //.. Edit profile API
 router.put('/addPicture', auth, UserCtrl.uploadProfilePic); //.. Edit profile picture API
 
-router.put('/personalInfo', auth, UserCtrl.addPersonalInfo); //.. Edit profile picture API
+router.put('/personalInfo', auth, UserCtrl.addPersonalInfo); //.. add Personal Info
+router.put('/academicInfo', auth, UserCtrl.addAcademicInfo); //.. add Academic Info
+router.put('/professionalInfo', auth, UserCtrl.addProfessionalInfo); //.. add Professional Info
 
 router.get("/:id", UserCtrl.getUserByID); //... Search user base on ID
 router.post("/:id", UserCtrl.updateUserByID); //... Search user base on ID

@@ -49,7 +49,29 @@ var userSchema = new mongoose.Schema({
   guardianEmailAddress2 : String,
   guardianParentMobile : String,
   guardianParentEmailAddress : String,
-  address : Object
+  address : Object,
+  currentlyStudying : Boolean,
+  currentCourse : String,
+  currentCourseName : String,
+  currentCourseUniversity : String,
+  currentCourseSchoolCollege : String,
+  currentCourseDepartmentBranch : String,
+  currentCourseProgram : String,
+  currentCourseSemester : Number,
+  currentCourseJoiningYear : Number,
+  currentCourseCompletionYear : Number,
+  ifAlumini : Boolean,
+  aluminiNumber : Number,
+  aluminiInstitution : Object,
+  currentlyWorking : Boolean,
+  currentWorkingInstitution : String,
+  currentWorkingDesignation : String,
+  currentWorkingDepartment : String,
+  currentRoles : Object,
+  currentWorkingInstitutionJoiningDate : String, 
+  ifPreviouslyWorked : Boolean,
+  previouslyWorkedNumber : Number,
+  previousWorks : Object
 });
 
 userSchema.methods.setPassword = function(password) {
