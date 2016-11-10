@@ -1,4 +1,4 @@
-#LittleHoots 2.0 backend code
+#With Student backend code
 
 ####To run 
 1. clone the repo
