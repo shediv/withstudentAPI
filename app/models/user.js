@@ -64,14 +64,17 @@ var userSchema = new mongoose.Schema({
   aluminiNumber : Number,
   aluminiInstitution : Object,
   currentlyWorking : Boolean,
-  currentWorkingInstitution : String,
-  currentWorkingDesignation : String,
-  currentWorkingDepartment : String,
-  currentRoles : Object,
-  currentWorkingInstitutionJoiningDate : String, 
+  currentWorkingInstitutionNumber : Number,
+  currentWorks : Object,
   ifPreviouslyWorked : Boolean,
   previouslyWorkedNumber : Number,
-  previousWorks : Object
+  previousWorks : Object,
+
+  careerGoals : Object,
+  hobbies : String,
+  favouriteSports : String,
+  favouriteMovie : String,
+  favouritePersonality : String
 });
 
 userSchema.methods.setPassword = function(password) {

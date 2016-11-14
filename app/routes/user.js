@@ -32,6 +32,7 @@ router.put('/addPicture', auth, UserCtrl.uploadProfilePic); //.. Edit profile pi
 router.put('/personalInfo', auth, UserCtrl.addPersonalInfo); //.. add Personal Info
 router.put('/academicInfo', auth, UserCtrl.addAcademicInfo); //.. add Academic Info
 router.put('/professionalInfo', auth, UserCtrl.addProfessionalInfo); //.. add Professional Info
+router.put('/extraInfo', auth, UserCtrl.addExtraInfo); //.. add Professional Info
 
 router.get("/:id", UserCtrl.getUserByID); //... Search user base on ID
 router.post("/:id", UserCtrl.updateUserByID); //... Search user base on ID

@@ -10,6 +10,7 @@ var User = function()
 	var nodeMailer = require('nodemailer');
 	var constants = require('../libraries/constants')
 	var CommonLib = require('../libraries/common').Common;
+	var shell = require('shelljs');
 
 	var path = require('path');
 	var EmailTemplate = require('email-templates').EmailTemplate;
@@ -485,14 +486,34 @@ var User = function()
 	    User.findById(req.payload._id).exec(function(err, user) {
 	    	var userData = {
 	    		currentlyWorking : req.body.currentlyWorking,
-				currentWorkingInstitution : req.body.currentWorkingInstitution,
-				currentWorkingDesignation : req.body.currentWorkingDesignation,
-				currentWorkingDepartment : req.body.currentWorkingDepartment,
-				currentWorkingInstitutionJoiningDate : req.body.currentWorkingInstitutionJoiningDate,
+				currentWorkingInstitutionNumber : req.body.currentWorkingInstitutionNumber,
+				currentWorks : req.body.currentWorks,
 				ifPreviouslyWorked : req.body.ifPreviouslyWorked,
 				previouslyWorkedNumber : req.body.previouslyWorkedNumber,
-				previousWorks : req.body.previousWorks,
-				currentRoles : req.body.currentRoles
+				previousWorks : req.body.previousWorks
+	    	}
+	    	//console.log(userData);
+
+	    	User.findOneAndUpdate({_id : user._id}, userData, {upsert : true, new : true}, function(err, updatedUser){
+				return res.status(200).json({user : updatedUser});
+			})
+	    });
+	  } 
+	};
+
+	this.addExtraInfo = function(req, res) {	
+	 if (!req.payload._id) {
+	    res.status(401).json({
+	      message : constants.constUnAuthorizedAccess
+	    });
+	  } else {
+	    User.findById(req.payload._id).exec(function(err, user) {
+	    	var userData = {
+	    		careerGoals : req.body.careerGoals,
+				hobbies : req.body.hobbies,
+				favouriteSports : req.body.favouriteSports,
+				favouriteMovie : req.body.favouriteMovie,
+				favouritePersonality : req.body.favouritePersonality
 	    	}
 	    	//console.log(userData);
 
@@ -523,57 +544,44 @@ var User = function()
 
 
     //Add a profile Picture
-    this.uploadProfilePic = function(req, res){
+    this.uploadProfilePic = function(req, res) {
+        if (!req.payload._id) {
+            res.status(HttpStatus.UNAUTHORIZED).json({
+                message: constants.constUnAuthorizedAccess
+            });
+        } else {
+            User.findById(req.payload._id).exec(function(err, user) {
+                var userId = user._id;
+                var sourcePath = req.file.path;
+                var extension = req.file.originalname.split(".");
+                extension = extension[extension.length - 1];
 
-    	if (!req.payload._id) {
-		    res.status(401).json({
-		      message : constants.constUnAuthorizedAccess
-		    });
-	  	} else {
-		    User.findById(req.payload._id).exec(function(err, user) {
-		        //res.status(200).json({user : user, file : req.file.path});
-		        var userId = user._id;	        
-		        var sourcePath = req.file.path;
-				var extension = req.file.originalname.split(".");
-				extension = extension[extension.length - 1];
+                var path = './public/images/users/' + user._id;
+                if (!fs.existsSync(path)) {
+                    shell.mkdir('-p', path);
+                }
+                
 
-				var path = './public/images/users/'+ user._id;
-				if (!fs.existsSync(path)){
-		            fs.mkdirSync(path);
-		        }
-				var destPath = "/images/users/"+userId+"/"+userId+"_ppic."+extension;
-				var source = fs.createReadStream(sourcePath);
-				var dest = fs.createWriteStream('./public'+destPath);
+                var destPath = "/images/users/" + userId + "/" + req.file.originalname;
+                var source = fs.createReadStream(sourcePath);
+                var dest = fs.createWriteStream('./public' + destPath);
 
-				source.pipe(dest);
+                source.pipe(dest);
 
-				source.on('end', function(){
-					//res.status(200).json({userId:user.email});
-					imagick.resize({
-					  srcPath: './public'+destPath,
-					  //dstPath: "./public/images/users/"+userId+"/"+userId+"_thumbnail."+extension,
-					  width: 200
-					},
-					function(err, stdout, stderr)
-					{
-					  if(err) throw err;
-					  fs.writeFileSync("./public/images/users/"+userId+"/"+userId+"_thumbnail."+extension, stdout, 'binary');
-					  console.log('resized image to fit within 200x200px');
-					  fs.unlinkSync(sourcePath);
-					  var images = {
-					  	profilePic : destPath
-					  	//thumbnail : "/images/users/"+userId+"/"+userId+"_thumbnail."+extension
-					  };
-					  
-					  User.findOneAndUpdate({_id : user._id}, images, {upsert : true}, function(err, result){
-					  	return res.status(200).json({images:images, userID : user._id});
-					  })
-					});
-				});
+                source.on('end', function() {
+                      var images = {
+                        profileImage: destPath
+                            //thumbnail : "/images/users/"+userId+"/"+userId+"_thumbnail."+extension
+                    };
 
-		    });
-	  	}	
-	};
+                    User.findOneAndUpdate({ _id: user._id }, images, { upsert: true }, function(err, result) {
+                        return res.status(200).json({ images: images, userID: user._id });
+                    });
+                });
+
+            });
+        }
+    };
 
 }
 
