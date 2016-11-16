@@ -28,11 +28,13 @@ router.get('/profile', auth, UserCtrl.profile); //.. Get profile data API
 //router.post('/getPasswordHint', UserCtrl.getUserPasswordHint); //... Get user Password hint based on the email
 router.put('/profile', auth, UserCtrl.updateProfile); //.. Edit profile API
 router.put('/addPicture', auth, UserCtrl.uploadProfilePic); //.. Edit profile picture API
+router.put('/addDocument', auth, UserCtrl.uploadDocument); //.. Edit profile picture API
 
 router.put('/personalInfo', auth, UserCtrl.addPersonalInfo); //.. add Personal Info
 router.put('/academicInfo', auth, UserCtrl.addAcademicInfo); //.. add Academic Info
 router.put('/professionalInfo', auth, UserCtrl.addProfessionalInfo); //.. add Professional Info
 router.put('/extraInfo', auth, UserCtrl.addExtraInfo); //.. add Professional Info
+router.put('/documentsRelatedInfo', auth, UserCtrl.addDocumentsRelatedInfo); //.. add Professional Info
 
 router.get("/:id", UserCtrl.getUserByID); //... Search user base on ID
 router.post("/:id", UserCtrl.updateUserByID); //... Search user base on ID

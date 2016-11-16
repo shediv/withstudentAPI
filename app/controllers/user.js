@@ -524,6 +524,37 @@ var User = function()
 	  } 
 	};
 
+	//Add extra documents for user
+	this.addDocumentsRelatedInfo = function(req, res) {	
+	 if (!req.payload._id) {
+	    res.status(401).json({
+	      message : constants.constUnAuthorizedAccess
+	    });
+	  } else {
+	    User.findById(req.payload._id).exec(function(err, user) {
+	    	var userData = {
+	    		photo : req.body.photoUrl,
+				sign : req.body.signUrl,
+				SSLCMarksCard : req.body.SSLCMarksCard,
+				panCard : req.body.panCard,
+				aadharCard : req.body.aadharCard,
+				voterId : req.body.voterId,
+				drivingLicence : req.body.drivingLicence,
+				rationCard : req.body.rationCard,
+				otherMarksCards : req.body.otherMarksCards,
+				otherCertificates : req.body.otherCertificates
+	    	}
+	    	//console.log(userData);
+
+	    	User.findOneAndUpdate({_id : user._id}, userData, {upsert : true, new : true}, function(err, updatedUser){
+				return res.status(200).json({user : updatedUser});
+			})
+	    });
+	  } 
+	};
+
+
+
 	//Check if old Password Matches
 	this.oldPasswordVerify = function(req, res) {	
 
@@ -576,6 +607,46 @@ var User = function()
 
                     User.findOneAndUpdate({ _id: user._id }, images, { upsert: true }, function(err, result) {
                         return res.status(200).json({ images: images, userID: user._id });
+                    });
+                });
+
+            });
+        }
+    };
+
+    //Add a Document for a user
+    this.uploadDocument = function(req, res) {
+        if (!req.payload._id) {
+            res.status(HttpStatus.UNAUTHORIZED).json({
+                message: constants.constUnAuthorizedAccess
+            });
+        } else {
+            User.findById(req.payload._id).exec(function(err, user) {
+                var userId = user._id;
+                var sourcePath = req.file.path;
+                var extension = req.file.originalname.split(".");
+                extension = extension[extension.length - 1];
+
+                var path = './public/images/users/' + user._id;
+                if (!fs.existsSync(path)) {
+                    shell.mkdir('-p', path);
+                }
+                
+
+                var destPath = "/images/users/" + userId + "/" + req.file.originalname;
+                var source = fs.createReadStream(sourcePath);
+                var dest = fs.createWriteStream('./public' + destPath);
+
+                source.pipe(dest);
+
+                source.on('end', function() {
+                      var images = {
+                        docUrl: destPath
+                            //thumbnail : "/images/users/"+userId+"/"+userId+"_thumbnail."+extension
+                    };
+
+                    User.findOneAndUpdate({ _id: user._id }, images, { upsert: true }, function(err, result) {
+                        return res.status(200).json({ document: images, userID: user._id });
                     });
                 });
 

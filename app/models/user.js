@@ -74,7 +74,18 @@ var userSchema = new mongoose.Schema({
   hobbies : String,
   favouriteSports : String,
   favouriteMovie : String,
-  favouritePersonality : String
+  favouritePersonality : String,
+
+  photo : String,
+  sign : String,
+  SSLCMarksCard : Object,
+  panCard : Object,
+  aadharCard : Object,
+  voterId : Object,
+  drivingLicence : Object,
+  rationCard : Object,
+  otherMarksCards : Object,
+  otherCertificates : Object
 });
 
 userSchema.methods.setPassword = function(password) {
