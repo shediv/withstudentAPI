@@ -32,6 +32,8 @@ app.set('view engine', 'jade');
 app.use(cors({
     allowedOrigins: [
         'http://localhost:3000',
+        'http://arduoustechnologies.com/ws_angular/client',
+        'http://arduoustechnologies.com/ws_angular/client:3000'
     ],
 	headers: [
 		'x-access-token', 'Content-Type',
