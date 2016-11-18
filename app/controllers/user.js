@@ -455,15 +455,8 @@ var User = function()
 	    User.findById(req.payload._id).exec(function(err, user) {
 	    	var userData = {
 	    		currentlyStudying : req.body.currentlyStudying,
-				currentCourse : req.body.currentCourse,
-				currentCourseName : req.body.currentCourseName,
-				currentCourseSchoolCollege : req.body.currentCourseSchoolCollege,
-				currentCourseUniversity : req.body.currentCourseUniversity,
-				currentCourseDepartmentBranch : req.body.currentCourseDepartmentBranch,
-				currentCourseProgram : req.body.currentCourseProgram,
-				currentCourseSemester : req.body.currentCourseSemester,
-				currentCourseJoiningYear : req.body.currentCourseJoiningYear,
-				currentCourseCompletionYear : req.body.currentCourseCompletionYear,
+	    		currentlyStudyingInstitutionNumber : req.body.currentlyStudyingInstitutionNumber,
+	    		currentlyStudyingInstitutions : req.body.currentlyStudyingInstitutions,
 				ifAlumini : req.body.ifAlumini,
 				aluminiNumber : req.body.aluminiNumber,
 				aluminiInstitution : req.body.aluminiInstitution
