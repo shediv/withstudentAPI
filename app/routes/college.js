@@ -14,5 +14,8 @@ var auth = jwt({
 });
 
 router.get("/", auth, CollegeCtrl.getCollegesList); //... Get all users
+router.get("/principal", auth, CollegeCtrl.getPrincipalList); //... Get all Principal List
+router.post("/", auth, CollegeCtrl.addCollegeDetails); //... add Colleges Details
+router.post("/collegeAdmin", auth, CollegeCtrl.addCollegeAdminInfo); //... add College Admin Info 
 
 module.exports = router;
