@@ -35,6 +35,8 @@ app.use(cors({
         'http://arduoustechnologies.com/ws_angular/client',
         'http://arduoustechnologies.com/ws_angular/client:3000',
         'http://arduoustechnologies.com',
+        'http://139.162.28.169',
+        'http://139.162.28.169:3000'
     ],
 	headers: [
 		'x-access-token', 'Content-Type',
