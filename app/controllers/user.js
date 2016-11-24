@@ -35,8 +35,8 @@ var User = function()
 		secure: true,
 		port: 465,
 		auth: {
-			user: 'presley.cci@gmail.com', //'withstudent.development@gmail.com',
-			pass:  'Slaay1988cc' //'8088025492'
+			user: 'withstudent.development@gmail.com', //'withstudent.development@gmail.com',
+			pass:  '8088025492' //'8088025492'
 		}
 	});
 
