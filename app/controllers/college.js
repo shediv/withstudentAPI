@@ -7,6 +7,7 @@
 var College = function() {
     var async = require('async');
     var Colleges = require('../models/colleges').Colleges;
+    var Departments = require('../models/departments').Departments;
     var User = require('../models/user').User;
 
     this.params = {};
@@ -99,6 +100,88 @@ var College = function() {
             newCollege = new Colleges(collegeData);
             newCollege.save(function(err) {
                return res.status(200).json({ newCollege : newCollege }); 
+            })
+        });
+      } 
+    };
+
+    //Add College Department Details
+    this.addCollegeDepartment = function(req, res) { 
+     if (!req.payload._id) {
+        res.status(401).json({
+          message : constants.constUnAuthorizedAccess
+        });
+      } else {
+        User.findById(req.payload._id).exec(function(err, user) {
+            var departmentData = {
+                collegeId : req.body.collegeId,
+                fullName : req.body.fullName,
+                shortName : req.body.shortName,
+                numberOfSemesters : req.body.numberOfSemesters,
+                semesterYearScheme : req.body.semesterYearScheme,
+                programName : req.body.programName,
+                numberOfSections : req.body.numberOfSections,
+                sections : req.body.sections
+            }
+            //console.log(userData);
+            newDepartment = new Departments(departmentData);
+            newDepartment.save(function(err) {
+               return res.status(200).json({ newDepartment : newDepartment }); 
+            })
+        });
+      } 
+    };
+
+    //Add College Time Table Template Details
+    this.addCollegeTimeTableTemplate = function(req, res) { 
+     if (!req.payload._id) {
+        res.status(401).json({
+          message : constants.constUnAuthorizedAccess
+        });
+      } else {
+        User.findById(req.payload._id).exec(function(err, user) {
+            var timeTableData = {
+                //collegeId : req.body.collegeId,
+                numberOfColumns : req.body.numberOfColumns,
+                monday : req.body.monday,
+                tuesday : req.body.tuesday,
+                wednesday : req.body.wednesday,
+                thursday : req.body.thursday,
+                friday : req.body.friday,
+                saturday : req.body.saturday,
+                sunday : req.body.sunday                
+            }
+
+            Colleges.findOneAndUpdate({_id : req.body.collegeId }, {timeTableTemplate : timeTableData}, {upsert : true, new : true}, function(err, addTTTemplate){
+                return res.status(200).json({ TTTemplate : addTTTemplate});
+            })
+        });
+      } 
+    };
+
+    //Add College Marks Entry Sheet Template
+    this.addCollegeMarksEntrySheetTemplate = function(req, res) { 
+     if (!req.payload._id) {
+        res.status(401).json({
+          message : constants.constUnAuthorizedAccess
+        });
+      } else {
+        User.findById(req.payload._id).exec(function(err, user) {
+            var marksEntryData = {
+                //collegeId : req.body.collegeId,
+                numberOfColumns : req.body.numberOfColumns,
+                index : req.body.index,
+                reportCardName : req.body.reportCardName,
+                reportCardMinimumMarks : req.body.reportCardMinimumMarks,
+                reportCardMinimumAttendancePercentage : req.body.reportCardMinimumAttendancePercentage,
+                questionNumber : req.body.questionNumber,
+                formula : req.body.formula,
+                marks : req.body.marks,
+                testNumber : req.body.testNumber               
+            }
+
+            Colleges.findOneAndUpdate({_id : req.body.collegeId }, { markSheetTemplate : marksEntryData}, {upsert : true, new : true}, function(err, addMarksEntryTemplate){
+                return res.status(200).json({ marksEntryTemplate : addMarksEntryTemplate});
             })
         });
       } 
