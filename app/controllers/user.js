@@ -110,7 +110,7 @@ var User = function()
 				  newUser.passwordLastUpdatedAt = new Date();
 				  newUser.createdAt = new Date();
 				  newUser.updatedAt = new Date();
-				  newUser.usertype = req.body.usertype;
+				  //newUser.usertype = req.body.usertype;
 				  newUser.isActive = 1;
 				  newUser.isVerified = false;
 				  newUser.setPassword(req.body.password);

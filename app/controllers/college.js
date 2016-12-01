@@ -28,13 +28,61 @@ var College = function() {
         }
     }
 
+    this.getCollegesDetails = function(req, res) {
+        if (!req.payload._id) {
+           return res.status(HttpStatus.UNAUTHORIZED).json({ message: constants.constUnAuthorizedAccess });
+        } else {
+            User.findById(req.payload._id).exec(function(err, user) {
+                if (err) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
+                Colleges.findOne({ _id : req.params.collegeId }).lean().exec(function(errAcademy, college) {
+                    if (errAcademy || college === null) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
+                    Departments.find({ collegeId : college._id.toString() }).lean().exec(function(errDepartment, departments) {
+                        college.departments = departments;
+                        return res.status(200).json({ college: college });
+                    })
+                })
+            });
+        }
+    }
+
     this.getPrincipalList = function(req, res) {
         if (!req.payload._id) {
            return res.status(HttpStatus.UNAUTHORIZED).json({ message: constants.constUnAuthorizedAccess });
         } else {
             User.findById(req.payload._id).exec(function(err, user) {
                 if (err) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
-                User.find({ type : "principal"}, { emailAddress : 1 }).lean().exec(function(errUsers, users) {
+                User.find({ type : "principal"}, { emailAddress : 1, firstName : 1, lastName : 1, profileImage : 1 }).lean().exec(function(errUsers, users) {
+                    if (errUsers || users === null) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
+                    return res.status(200).json({ users: users });
+                })
+            });
+        }
+    }
+
+    //Get Vice principal's list
+    this.getVicePrincipalList = function(req, res) {
+        if (!req.payload._id) {
+           return res.status(HttpStatus.UNAUTHORIZED).json({ message: constants.constUnAuthorizedAccess });
+        } else {
+            User.findById(req.payload._id).exec(function(err, user) {
+                if (err) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
+                User.find({ type : "vicePrincipal"}, { emailAddress : 1, firstName : 1, lastName : 1, profileImage : 1 }).lean().exec(function(errUsers, users) {
+                    if (errUsers || users === null) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
+                    return res.status(200).json({ users: users });
+                })
+            });
+        }
+    }
+
+
+    //Get Department HOD's list
+    this.getDepartmentHODList = function(req, res) {
+        if (!req.payload._id) {
+           return res.status(HttpStatus.UNAUTHORIZED).json({ message: constants.constUnAuthorizedAccess });
+        } else {
+            User.findById(req.payload._id).exec(function(err, user) {
+                if (err) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
+                User.find({ type : "HOD"}, { emailAddress : 1, firstName : 1, lastName : 1, profileImage : 1 }).lean().exec(function(errUsers, users) {
                     if (errUsers || users === null) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
                     return res.status(200).json({ users: users });
                 })
@@ -127,6 +175,41 @@ var College = function() {
             newDepartment = new Departments(departmentData);
             newDepartment.save(function(err) {
                return res.status(200).json({ newDepartment : newDepartment }); 
+            })
+        });
+      } 
+    };
+
+    //add Vice Principal
+    this.addVicePrincipal = function(req, res) { 
+     if (!req.payload._id) {
+        res.status(401).json({
+          message : constants.constUnAuthorizedAccess
+        });
+      } else {
+        User.findById(req.payload._id).exec(function(err, user) {
+            var collegeData = {
+                vicePrincipal : req.body.vicePrincipal,
+                dean : req.body.dean
+            }
+            //console.log(collegeData);
+            Colleges.findOneAndUpdate({ _id : req.params.collegeId }, collegeData, {upsert : true, new : true}, function(err, updatedCollege){
+                return res.status(200).json({ college : updatedCollege});
+            })
+        });
+      } 
+    };
+
+    this.addCoordinators = function(req, res) { 
+     if (!req.payload._id) {
+        res.status(401).json({
+          message : constants.constUnAuthorizedAccess
+        });
+      } else {
+        User.findById(req.payload._id).exec(function(err, user) {
+            var coordinatorsData = req.body.coordinators;
+            Colleges.findOneAndUpdate({ _id : req.params.collegeId }, { coordinators : req.body.coordinators }, {upsert : true, new : true}, function(err, updatedCollege){
+                return res.status(200).json({ college : updatedCollege});
             })
         });
       } 
