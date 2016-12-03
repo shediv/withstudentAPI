@@ -74,6 +74,20 @@ var College = function() {
         }
     }
 
+    this.getCoordinatorsList = function(req, res) {
+        if (!req.payload._id) {
+           return res.status(HttpStatus.UNAUTHORIZED).json({ message: constants.constUnAuthorizedAccess });
+        } else {
+            User.findById(req.payload._id).exec(function(err, user) {
+                if (err) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
+                User.find({ "currentRoles.name" : req.params.roleType }, { emailAddress : 1, firstName : 1, lastName : 1, profileImage : 1 }).lean().exec(function(errUsers, users) {
+                    if (errUsers || users === null) return res.status(404).json({ message: constants.constUnAuthorizedAccess });
+                    return res.status(200).json({ users: users });
+                })
+            });
+        }
+    }
+
 
     //Get Department HOD's list
     this.getDepartmentHODList = function(req, res) {
