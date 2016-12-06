@@ -14,7 +14,10 @@ var auth = jwt({
 });
 
 
+router.get("/", auth, DepartmentCtrl.getDepartmentDetails); //... get Department Details
 router.post("/addHOD/:collegeId/:departmentId", auth, DepartmentCtrl.addDepartmentHOD); //... add Colleges Details
+router.post("/addCoordinator/:departmentId", auth, DepartmentCtrl.addDepartmentCoordinator); //... add Colleges Details
+router.post("/addSectionTeacher/:departmentId/:sectionId", auth, DepartmentCtrl.addDepartmentSectionTeacher); //... add Colleges Details
 // router.get("/", auth, CollegeCtrl.getCollegesList); //... Get all users
 // router.get("/principal", auth, CollegeCtrl.getPrincipalList); //... Get all Principal List
 // router.get("/vicePrincipal", auth, CollegeCtrl.getVicePrincipalList); //... Get all Vice Principal List

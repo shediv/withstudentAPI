@@ -15,6 +15,7 @@ var auth = jwt({
 
 router.get("/", auth, CollegeCtrl.getCollegesList); //... Get all users
 router.get("/principal", auth, CollegeCtrl.getPrincipalList); //... Get all Principal List
+router.get("/teacher", auth, CollegeCtrl.getDepartmentTeacherList); //... Get all Principal List
 router.get("/hod", auth, CollegeCtrl.getDepartmentHODList); //... Get all Principal List
 router.get("/vicePrincipal", auth, CollegeCtrl.getVicePrincipalList); //... Get all Principal List
 router.get("/coordinators/:roleType", auth, CollegeCtrl.getCoordinatorsList); //... Get all Coordinators List
