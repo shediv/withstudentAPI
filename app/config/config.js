@@ -7,13 +7,13 @@ var config = {
   smtpService : 'smtp.mandrillapp.com',
   smtpHost : 'smtp.mandrillapp.com',
   smtpAuth : {
-    user: 'LittleHoots', //www.creativecapsule.com
-    pass: '7svi82sWZFQqAUZKWq9Lhg' //1C0lKsSFlPkZgOqGBO6exg
+    user: '', //www.creativecapsule.com
+    pass: '' //1C0lKsSFlPkZgOqGBO6exg
   },
   smtpPort:587,
 
   //Domain Name Configs
-  appHost : 'http://localhost:3000/#/',
+  appHost : 'http://139.162.28.169/client/#/',
 
   apiHost : "http://localhost:9000/#/",    
 };
