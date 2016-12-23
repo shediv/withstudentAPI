@@ -36,6 +36,9 @@ router.put('/professionalInfo', auth, UserCtrl.addProfessionalInfo); //.. add Pr
 router.put('/extraInfo', auth, UserCtrl.addExtraInfo); //.. add Professional Info
 router.put('/documentsRelatedInfo', auth, UserCtrl.addDocumentsRelatedInfo); //.. add Professional Info
 
+//Address Routes
+router.get('/address', auth, UserCtrl.address); //.. Get global address API
+
 router.get("/:id", UserCtrl.getUserByID); //... Search user base on ID
 router.post("/:id", UserCtrl.updateUserByID); //... Search user base on ID
 

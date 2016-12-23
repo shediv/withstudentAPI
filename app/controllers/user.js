@@ -2,6 +2,7 @@ var User = function()
 {
 	var async = require('async');
 	var User = require('../models/user').User;
+	var Address = require('../models/address').Address;
 	var fs = require('fs');
 	var crypto =require('crypto');
 	var passport = require('passport');
@@ -44,6 +45,13 @@ var User = function()
 	this.getUsers = function(req, res){
 		User.find({}).lean().exec(function(err, users){
 			return res.status(200).json({users : users});
+		})
+	};
+
+	//...Get global address
+	this.address = function(req, res){
+		Address.find({}).lean().exec(function(err, address){
+			return res.status(200).json({address : address});
 		})
 	};
 
@@ -390,6 +398,10 @@ var User = function()
 	    		user.setPassword(req.body.data.newPassword);
 	    		userData.salt = user.salt;
 	    		userData.hash = user.hash;
+	    	}
+
+	    	if(req.body.data.isActive){
+	    		userData.isActive = req.body.data.isActive;
 	    	}
 	    	//console.log(userData);
 
