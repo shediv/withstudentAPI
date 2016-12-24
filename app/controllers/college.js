@@ -190,22 +190,28 @@ var College = function() {
         });
       } else {
         User.findById(req.payload._id).exec(function(err, user) {
-            var departmentData = {
-                collegeId : req.body.collegeId,
-                fullName : req.body.fullName,
-                shortName : req.body.shortName,
-                numberOfSemesters : req.body.numberOfSemesters,
-                semesterYearScheme : req.body.semesterYearScheme,
-                programName : req.body.programName,
-                numberOfSections : req.body.numberOfSections,
-                sections : req.body.sections,
-                coordinators : []
-            }
-            //console.log(userData);
-            newDepartment = new Departments(departmentData);
-            newDepartment.save(function(err) {
-               return res.status(200).json({ newDepartment : newDepartment }); 
-            })
+            Colleges.findOne({ _id : req.body.collegeId, pricipalEmailAddress : user.emailAddress }).lean().exec(function(errC, collegeData){
+                if(errC || collegeData == null) {
+                    return res.status(501).json({ msg : "You don't have permission to perform this activity"});
+                }else{
+                    var departmentData = {
+                        collegeId : req.body.collegeId,
+                        fullName : req.body.fullName,
+                        shortName : req.body.shortName,
+                        numberOfSemesters : req.body.numberOfSemesters,
+                        semesterYearScheme : req.body.semesterYearScheme,
+                        programName : req.body.programName,
+                        numberOfSections : req.body.numberOfSections,
+                        sections : req.body.sections,
+                        coordinators : []
+                    }
+                    //console.log(userData);
+                    newDepartment = new Departments(departmentData);
+                    newDepartment.save(function(err) {
+                       return res.status(200).json({ newDepartment : newDepartment }); 
+                    })
+                }
+            })        
         });
       } 
     };
@@ -218,14 +224,20 @@ var College = function() {
         });
       } else {
         User.findById(req.payload._id).exec(function(err, user) {
-            var collegeData = {
-                vicePrincipal : req.body.vicePrincipal,
-                dean : req.body.dean
-            }
-            //console.log(collegeData);
-            Colleges.findOneAndUpdate({ _id : req.params.collegeId }, collegeData, {upsert : true, new : true}, function(err, updatedCollege){
-                return res.status(200).json({ college : updatedCollege});
-            })
+            Colleges.findOne({ _id : req.params.collegeId, pricipalEmailAddress : user.emailAddress }).lean().exec(function(errC, collegeData){
+                if(errC || collegeData == null) {
+                    return res.status(501).json({ msg : "You don't have permission to perform this activity"});
+                }else{
+                    var collegeData = {
+                        vicePrincipal : req.body.vicePrincipal,
+                        dean : req.body.dean
+                    }
+                    //console.log(collegeData);
+                    Colleges.findOneAndUpdate({ _id : req.params.collegeId }, collegeData, {upsert : true, new : true}, function(err, updatedCollege){
+                        return res.status(200).json({ college : updatedCollege});
+                    })
+                }
+            })                
         });
       } 
     };
@@ -237,10 +249,16 @@ var College = function() {
         });
       } else {
         User.findById(req.payload._id).exec(function(err, user) {
-            var coordinatorsData = req.body.coordinators;
-            Colleges.findOneAndUpdate({ _id : req.params.collegeId }, { coordinators : req.body.coordinators }, {upsert : true, new : true}, function(err, updatedCollege){
-                return res.status(200).json({ college : updatedCollege});
-            })
+            Colleges.findOne({ _id : req.params.collegeId, pricipalEmailAddress : user.emailAddress }).lean().exec(function(errC, collegeData){
+                if(errC || collegeData == null) {
+                    return res.status(501).json({ msg : "You don't have permission to perform this activity"});
+                }else{
+                        var coordinatorsData = req.body.coordinators;
+                        Colleges.findOneAndUpdate({ _id : req.params.collegeId }, { coordinators : req.body.coordinators }, {upsert : true, new : true}, function(err, updatedCollege){
+                            return res.status(200).json({ college : updatedCollege});
+                        })
+                    }
+            })            
         });
       } 
     };

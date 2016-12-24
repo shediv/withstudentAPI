@@ -39,7 +39,7 @@ module.exports = Object.freeze({
 
 
     //Register new user
-    constEmailNotVerified: "Please verify your Email address before loggin to LittleHoots",
+    constEmailNotVerified: "Please verify your Email address before loggin to WithStudent",
     constNewUserIsCreated: "Your account has been created! " + "<br>" + "Please verify your Email address before loggin to LittleHoots.",
     constEmailAlreadyRegistered: "The user name you entered is already taken by another user, please try another user name.",
     constUserEmailVerified: "User's email verified",
