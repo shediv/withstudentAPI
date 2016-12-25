@@ -9,6 +9,7 @@ var College = function() {
     var Colleges = require('../models/colleges').Colleges;
     var Departments = require('../models/departments').Departments;
     var User = require('../models/user').User;
+    var Sections = require('../models/sections').Sections;
 
     this.params = {};
     this.config = require('../config/config.js');
@@ -220,7 +221,35 @@ var College = function() {
                     //console.log(userData);
                     newDepartment = new Departments(departmentData);
                     newDepartment.save(function(err) {
-                       return res.status(200).json({ newDepartment : newDepartment }); 
+                       res.status(200).json({ newDepartment : newDepartment });
+
+                        //Add sections
+                        async.each(req.body.sections, function(section, callbackEach) {
+                                newSectionData = {
+                                   collegeId : req.body.collegeId,
+                                   departmentId : newDepartment._id.toString(),
+                                   semester :  section.semester,
+                                   section :  section.nameOfSection,
+                                   syllabus : [],
+                                   teachers : [],
+                                   students : [],
+                                   createdBy : user._id.toString(),
+                                   createdAt : new Date()
+
+                                }
+
+                                console.log(newSectionData);
+                                //callbackEach(err, section)
+                                newSection = new Sections(newSectionData);
+                                newSection.save(function(err) {
+                                  callbackEach(err, section)  
+                                })     
+                            },
+                            function(err) {
+                               console.log("sections added"); 
+                            }
+                        );
+
                     })
                 }
             })        

@@ -24,18 +24,12 @@ var Department = function() {
             Departments.findOne({ "HOD.hodId" : user._id.toString() }).lean().exec(function(errD, departmentData){
                if(err || departmentData == null) return res.status(500).json({ msg : "This user is not a HOD of the specified department"});
                //return res.status(200).json({ department : departmentData});
+                Sections.find({ departmentId : departmentData._id.toString() }).lean().exec(function(errS, sectionData){
+                    departmentData.sections = sectionData;
+                    //console.log(departmentData._id.toString())
+                    return res.status(200).json({ department : departmentData}); 
+                })
 
-                async.each(departmentData.sections, function(section, callbackEach) {
-                       Sections.findOne({ _id : section.sectionId}).lean().exec(function(errS, sectionData){
-                            section.sectionInfo = sectionData
-                            console.log(section)
-                            callbackEach(null, section); 
-                       })                            
-                    },
-                    function(err) {                                                
-                        return res.status(200).json({ department : departmentData});
-                    }
-                );
             })
         });
       } 
