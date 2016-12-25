@@ -176,7 +176,19 @@ var College = function() {
             //console.log(userData);
             newCollege = new Colleges(collegeData);
             newCollege.save(function(err) {
-               return res.status(200).json({ newCollege : newCollege }); 
+                res.status(200).json({ newCollege : newCollege });
+                newRole = { 
+                    collegeId : newCollege._id, 
+                    isActive : true, 
+                    name : "admin"
+                }
+
+                //console.log(user._id.toString())
+
+                User.findOneAndUpdate({ _id: user._id.toString() }, { $set: { collegeAdmin : newRole } }, { new: true }).lean().exec(function(errUser, userData) {
+                    console.log(userData)
+                })
+
             })
         });
       } 

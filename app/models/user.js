@@ -50,6 +50,7 @@ var userSchema = new mongoose.Schema({
   guardianParentMobile : String,
   guardianParentEmailAddress : String,
   address : Object,
+  collegeAdmin : Object,
 
   //Academic Info
   currentlyStudying : Boolean,
